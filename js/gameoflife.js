@@ -35,23 +35,21 @@ const corners = (state = []) => {
     topRight,
     bottomLeft
   }
-
 };
 
 const printCells = (state) => {
-  let { topRight, bottomLeft } = this.corners(state);
+  let { topRight, bottomLeft } = corners(state);
   let result = "";
 
-  for(let i = bottomLeft[0]; i <= topRight[0]; i++)
+  for(let i = topRight[1]; i >= bottomLeft[1]; i--)
   {
-    for(let j = topRight[1]; j >= bottomLeft[1]; j--)
+   let row = [];
+    for(let j = bottomLeft[0]; j <= topRight[0]; j++)
     {
-      result += printCell([i,j],state);
-      if(j != bottomLeft[1])
-        result += ' ';
+      row.push(printCell([j, i], state));
     }
 
-    result += '\n';
+    result += row.join(" ") + '\n';
   }
 
   return result;
@@ -84,11 +82,11 @@ const willBeAlive = (cell, state) => {
 
 const calculateNext = (state) => {
   let result = new Array();
-  let { bottomLeft, topRight } = this.corners(state);
+  let { bottomLeft, topRight } = corners(state);
 
-  for(let i = bottomLeft[0] -1; i <= topRight[0] + 1; i++)
+  for(let i = topRight[1] +1; i >= bottomLeft[1]-1; i--)
   {
-    for(let j = bottomLeft[1] - 1; j <= topRight[1] + 1; j++)
+    for(let j = bottomLeft[0] - 1; j <= topRight[0] + 1; j++)
     {
       if(willBeAlive([i,j], state))
         result.push([i,j]);
@@ -111,7 +109,7 @@ const iterate = (state, iterations) => {
 };
 
 const main = (pattern, iterations) => {
-  let result = iterate(this.startPatterns[pattern], iterations);
+  let result = iterate(startPatterns[pattern], iterations);
   result.forEach(r => console.log(printCells(r)));
 };
 
